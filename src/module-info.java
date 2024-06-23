@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author wiuav
+ *
+ */
+module xadrez {
+}
