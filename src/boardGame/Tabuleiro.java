@@ -42,5 +42,10 @@ public class Tabuleiro {
 		return pecas[position.getLinha()][position.getColuna()];
 	}
 	
+	public void posicionarPeca(Peca peca, Position position) {
+		pecas[position.getLinha()][position.getColuna()] = peca;
+		//posso acessar diretamente pois está no mesmo pacote como protected
+		peca.position = position;
+	}
 	
 }
