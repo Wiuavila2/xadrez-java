@@ -8,6 +8,9 @@ public class Tabuleiro {
 	
 	
 	public Tabuleiro(int linhas, int colunas) {
+		if(linhas < 1 || colunas < 1 ) {
+			throw new TabuleiroException("Erro ao criar o Tabuleiro : é necessário que haja ao menos 1 linha e 1 coluna");
+		}
 		this.linhas = linhas;
 		this.colunas = colunas;
 		pecas = new Peca[linhas][colunas];
@@ -19,33 +22,44 @@ public class Tabuleiro {
 		return linhas;
 	}
 
-
-	public void setLinhas(int linhas) {
-		this.linhas = linhas;
-	}
-
-
 	public int getColunas() {
 		return colunas;
 	}
-
-
-	public void setColunas(int colunas) {
-		this.colunas = colunas;
-	}
 	
 	public Peca peca(int linha, int coluna) {
+		if(!positionExiste(linha, coluna)) {
+			throw new TabuleiroException("Posição não está np tabuleiro!");
+		}
 		return pecas[linha][coluna];
 	}
 	
 	public Peca peca(Position position) {
+		if(!positionExiste(position)) {
+			throw new TabuleiroException("Posição não está np tabuleiro!");
+		}
 		return pecas[position.getLinha()][position.getColuna()];
 	}
 	
 	public void posicionarPeca(Peca peca, Position position) {
+		if(temUmaPeca(position)) {
+			throw new TabuleiroException("ja existe uma peça na posição" + position);
+		}
 		pecas[position.getLinha()][position.getColuna()] = peca;
 		//posso acessar diretamente pois está no mesmo pacote como protected
 		peca.position = position;
 	}
+	public boolean positionExiste(int linha, int coluna) {
+		return linha >= 0 && linha < linhas && coluna >= 0 && coluna < colunas;
+	}
 	
+	public boolean positionExiste(Position position) {
+		return positionExiste(position.getLinha(), position.getColuna());
+	}
+	
+	public boolean temUmaPeca(Position position)  {
+		if(!positionExiste(position)) {
+			throw new TabuleiroException("Posição não está np tabuleiro!");
+		}
+		return peca(position) != null;
+	}
 }
