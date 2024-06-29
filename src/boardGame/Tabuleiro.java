@@ -35,7 +35,7 @@ public class Tabuleiro {
 	
 	public Peca peca(Position position) {
 		if(!positionExiste(position)) {
-			throw new TabuleiroException("Posição não está np tabuleiro!");
+			throw new TabuleiroException("Posição não está no tabuleiro!");
 		}
 		return pecas[position.getLinha()][position.getColuna()];
 	}
@@ -48,6 +48,19 @@ public class Tabuleiro {
 		//posso acessar diretamente pois está no mesmo pacote como protected
 		peca.position = position;
 	}
+	
+	public Peca removerPeca(Position position) {
+		if(!positionExiste(position)) {
+			throw new TabuleiroException("Posição não está no tabuleiro!");
+		}
+		if(peca(position) == null) {
+			return null;
+		}
+		Peca aux = peca(position);
+		aux.position = null;
+		pecas[position.getLinha()][position.getColuna()] = null;
+		return aux;
+	}
 	public boolean positionExiste(int linha, int coluna) {
 		return linha >= 0 && linha < linhas && coluna >= 0 && coluna < colunas;
 	}
@@ -58,7 +71,7 @@ public class Tabuleiro {
 	
 	public boolean temUmaPeca(Position position)  {
 		if(!positionExiste(position)) {
-			throw new TabuleiroException("Posição não está np tabuleiro!");
+			throw new TabuleiroException("Posição não está no tabuleiro!");
 		}
 		return peca(position) != null;
 	}

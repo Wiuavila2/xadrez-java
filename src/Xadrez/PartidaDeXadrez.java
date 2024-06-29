@@ -2,6 +2,8 @@ package Xadrez;
 
 import Xadrez.pecas.Rei;
 import Xadrez.pecas.Torre;
+import boardGame.Peca;
+import boardGame.Position;
 import boardGame.Tabuleiro;
 
 public class PartidaDeXadrez {
@@ -23,6 +25,25 @@ public class PartidaDeXadrez {
 		return mat;
 	}
 	
+	private Peca fazerMovimento(Position fonte, Position alvo){
+		Peca p = tabuleiro.removerPeca(fonte);
+		Peca pecaCapturada = tabuleiro.removerPeca(alvo);
+		tabuleiro.posicionarPeca(p, alvo);
+		return pecaCapturada;
+	}
+	public PecaDeXadrez realizarMovimentoDeXadrez(XadrezPosition posicaoFonte, XadrezPosition posicaoAlvo){
+		Position fonte = posicaoFonte.ParaPosicao();
+		Position alvo = posicaoAlvo.ParaPosicao();
+		validarPosicaoDeOrigem(fonte);
+		Peca pecaCapturada = fazerMovimento(fonte , alvo);
+		return (PecaDeXadrez)pecaCapturada;
+	}
+	
+	private void validarPosicaoDeOrigem(Position position) {
+		if(!tabuleiro.temUmaPeca(position)) {
+			throw new XadrezException("não existe peça na posição de origem !");
+		}
+	}
 	private void ColocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
 		//paraposição converte em matriz
 		tabuleiro.posicionarPeca(peca, new XadrezPosition(coluna, linha).ParaPosicao());
