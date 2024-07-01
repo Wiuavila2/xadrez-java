@@ -43,6 +43,9 @@ public class PartidaDeXadrez {
 		if(!tabuleiro.temUmaPeca(position)) {
 			throw new XadrezException("não existe peça na posição de origem !");
 		}
+		if(!tabuleiro.peca(position).temAlgumMovimentoPossivel()) {
+			throw new XadrezException("não existem movimentos possíveis para a peça escolhida !");
+		}
 	}
 	private void ColocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
 		//paraposição converte em matriz

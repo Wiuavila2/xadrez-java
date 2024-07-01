@@ -15,6 +15,12 @@ public class Rei extends PecaDeXadrez {
 		//letra que será impressa no tabuleiro
 		return "R";
 	}
+
+	@Override
+	public boolean[][] movimentosPossiveis() {
+		boolean[][] mat = new boolean[getTabuleiro().getLinhas()][getTabuleiro().getColunas()];
+		return mat;
+	}
 	
 
 }
