@@ -20,6 +20,11 @@ public class Position {
 	public void setColuna(int coluna) {
 		this.coluna = coluna;
 	}
+	
+	public void setValores(int linha, int coluna) {
+		this.Linha = linha;
+		this.coluna = coluna;
+	}
 	@Override
 	public String toString() {
 		return Linha+ ", " + coluna;

@@ -35,6 +35,7 @@ public class PartidaDeXadrez {
 		Position fonte = posicaoFonte.ParaPosicao();
 		Position alvo = posicaoAlvo.ParaPosicao();
 		validarPosicaoDeOrigem(fonte);
+		validarPosicaoDeDestino(fonte, alvo);
 		Peca pecaCapturada = fazerMovimento(fonte , alvo);
 		return (PecaDeXadrez)pecaCapturada;
 	}
@@ -45,6 +46,12 @@ public class PartidaDeXadrez {
 		}
 		if(!tabuleiro.peca(position).temAlgumMovimentoPossivel()) {
 			throw new XadrezException("não existem movimentos possíveis para a peça escolhida !");
+		}
+	}
+	
+	private void validarPosicaoDeDestino(Position fonte, Position alvo) {
+		if(!tabuleiro.peca(fonte).movimentoPossivel(alvo)) {
+			throw new XadrezException("A peça escolhida não pode se mover para o alvo selecionado!"); 
 		}
 	}
 	private void ColocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
