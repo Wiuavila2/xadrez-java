@@ -25,6 +25,12 @@ public class PartidaDeXadrez {
 		return mat;
 	}
 	
+	public boolean[][] movimentosPossiveis(XadrezPosition posicaoFonte){
+		Position position = posicaoFonte.ParaPosicao();
+		validarPosicaoDeOrigem(position);
+		return tabuleiro.peca(position).movimentosPossiveis();
+	}
+	
 	private Peca fazerMovimento(Position fonte, Position alvo){
 		Peca p = tabuleiro.removerPeca(fonte);
 		Peca pecaCapturada = tabuleiro.removerPeca(alvo);
