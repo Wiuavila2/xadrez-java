@@ -2,7 +2,6 @@ package Xadrez;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import Xadrez.pecas.Rei;
@@ -17,6 +16,7 @@ public class PartidaDeXadrez {
 	private Cor jogadorAtual;
 	private Tabuleiro tabuleiro;
 	private boolean check;
+	private boolean checkMate;
 	
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -80,12 +80,20 @@ public class PartidaDeXadrez {
 		
 		check = (testarCheck(oponente(jogadorAtual))) ? true : false;
 		
-		proximoTurno();
+		if(testarCheckMate(oponente(jogadorAtual))) {
+			checkMate = true;
+		}else {
+			proximoTurno();			
+		}
 		return (PecaDeXadrez)pecaCapturada;
 	}
 	
 	public boolean getCheck() {
 		return check;
+	}
+	
+	public boolean getCheckMate() {
+		return checkMate;
 	}
 
 	private void validarPosicaoDeOrigem(Position position) {
@@ -136,6 +144,32 @@ public class PartidaDeXadrez {
 		}
 		return false;
 	}
+	
+	private boolean testarCheckMate(Cor cor) {
+		if(!testarCheck(cor)) {
+			return false;
+		}
+		List<Peca> list = pecasNoTabuleiro.stream().filter(x -> ((PecaDeXadrez)x).getCor() == cor).collect(Collectors.toList());
+		for(Peca p : list) {
+			boolean[][] mat = p.movimentosPossiveis();
+			for(int i = 0; i<tabuleiro.getLinhas(); i ++) {
+				for(int j = 0; j<tabuleiro.getColunas(); j ++) {
+					if(mat[i][j]) {
+						//não posso usar o .position pois ele é protected
+						Position fonte = ((PecaDeXadrez)p).getXadrezPosition().ParaPosicao();
+						Position alvo = new Position(i, j); 
+						Peca pecaCapturada = fazerMovimento(fonte, alvo);
+						boolean testCheck = testarCheck(cor);
+						desfazerMovimento(fonte, alvo, pecaCapturada);
+						if(!testCheck) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
 	private void ColocarNovaPeca(char coluna, int linha, PecaDeXadrez peca) {
 		//paraposição converte em matriz
 		tabuleiro.posicionarPeca(peca, new XadrezPosition(coluna, linha).ParaPosicao());
@@ -143,19 +177,12 @@ public class PartidaDeXadrez {
 	}
 	
 	private void setupInicial() {
-		ColocarNovaPeca('c', 1, new Torre(tabuleiro, Cor.BRANCO));
-		ColocarNovaPeca('c', 2, new Torre(tabuleiro, Cor.BRANCO));
-		ColocarNovaPeca('d', 2, new Torre(tabuleiro, Cor.BRANCO));
-		ColocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.BRANCO));
-		ColocarNovaPeca('e', 1, new Torre(tabuleiro, Cor.BRANCO));
-        ColocarNovaPeca('d', 1, new Rei(tabuleiro, Cor.BRANCO));
+		ColocarNovaPeca('h', 7, new Torre(tabuleiro, Cor.BRANCO));
+		ColocarNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCO));
 
-        ColocarNovaPeca('c', 7, new Torre(tabuleiro, Cor.PRETO));
-        ColocarNovaPeca('c', 8, new Torre(tabuleiro, Cor.PRETO));
-        ColocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.PRETO));
-        ColocarNovaPeca('e', 7, new Torre(tabuleiro, Cor.PRETO));
-        ColocarNovaPeca('e', 8, new Torre(tabuleiro, Cor.PRETO));
-        ColocarNovaPeca('d', 8, new Rei(tabuleiro, Cor.PRETO));
+        ColocarNovaPeca('b', 8, new Torre(tabuleiro, Cor.PRETO));
+        ColocarNovaPeca('a', 8, new Rei(tabuleiro, Cor.PRETO));
 	}
 	
 	public int getTurno() {
