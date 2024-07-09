@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Xadrez.pecas.Peao;
 import Xadrez.pecas.Rei;
 import Xadrez.pecas.Torre;
 import boardGame.Peca;
@@ -45,7 +46,8 @@ public class PartidaDeXadrez {
 	}
 	
 	private Peca fazerMovimento(Position fonte, Position alvo){
-		Peca p = tabuleiro.removerPeca(fonte);
+		PecaDeXadrez p = (PecaDeXadrez)tabuleiro.removerPeca(fonte);
+		p.aumentarMoveCount();
 		Peca pecaCapturada = tabuleiro.removerPeca(alvo);
 		tabuleiro.posicionarPeca(p, alvo);
 		
@@ -57,9 +59,9 @@ public class PartidaDeXadrez {
 	}
 	
 	public void desfazerMovimento(Position fonte,Position destino, Peca pecaCapturada) {
-		Peca p = tabuleiro.removerPeca(destino);
+		PecaDeXadrez p = (PecaDeXadrez)tabuleiro.removerPeca(destino);
+		p.diminuirMoveCount();
 		tabuleiro.posicionarPeca(p, fonte);
-		
 		if(pecaCapturada != null) {
 			tabuleiro.posicionarPeca(pecaCapturada, destino);
 			pecasCapturadas.remove(pecaCapturada);
@@ -177,12 +179,30 @@ public class PartidaDeXadrez {
 	}
 	
 	private void setupInicial() {
-		ColocarNovaPeca('h', 7, new Torre(tabuleiro, Cor.BRANCO));
-		ColocarNovaPeca('d', 1, new Torre(tabuleiro, Cor.BRANCO));
+		ColocarNovaPeca('a', 1, new Torre(tabuleiro, Cor.BRANCO));
         ColocarNovaPeca('e', 1, new Rei(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('h', 1, new Torre(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('a', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('b', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('c', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('d', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('e', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('f', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('g', 2, new Peao(tabuleiro, Cor.BRANCO));
+        ColocarNovaPeca('h', 2, new Peao(tabuleiro, Cor.BRANCO));
 
-        ColocarNovaPeca('b', 8, new Torre(tabuleiro, Cor.PRETO));
-        ColocarNovaPeca('a', 8, new Rei(tabuleiro, Cor.PRETO));
+		// Peças Pretas
+       ColocarNovaPeca('a', 8, new Torre(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('e', 8, new Rei(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('h', 8, new Torre(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('a', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('b', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('c', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('d', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('e', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('f', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('g', 7, new Peao(tabuleiro, Cor.PRETO));
+       ColocarNovaPeca('h', 7, new Peao(tabuleiro, Cor.PRETO));
 	}
 	
 	public int getTurno() {
