@@ -6,15 +6,30 @@ import boardGame.Tabuleiro;
 
 public abstract class PecaDeXadrez extends Peca {
 	
+	private Cor cor;
+	private int moveCount;
+
 	public PecaDeXadrez(Tabuleiro tabuleiro, Cor cor) {
 		super(tabuleiro);
 		this.cor = cor;
 	}
 
-	private Cor cor;
 
 	public Cor getCor() {
 		return cor;
+	}
+	
+	public int getMoveCount() {
+		return moveCount;
+	}
+
+
+	public void aumentarMoveCount() {
+		moveCount ++;
+	}
+	
+	public void diminuirMoveCount() {
+		moveCount --;
 	}
 	
 	public XadrezPosition getXadrezPosition() {
