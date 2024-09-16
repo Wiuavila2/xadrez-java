@@ -1,5 +1,6 @@
 package Xadrez;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +22,8 @@ public class PartidaDeXadrez {
 	private Tabuleiro tabuleiro;
 	private boolean check;
 	private boolean checkMate;
-
 	private PecaDeXadrez vulneravelAEmpassant;
+	private PecaDeXadrez promovida;
 	
 	private List<Peca> pecasNoTabuleiro = new ArrayList<>();
 	private List<Peca> pecasCapturadas = new ArrayList<>();
@@ -154,6 +155,14 @@ public class PartidaDeXadrez {
 
 		PecaDeXadrez pecaMovimentada = (PecaDeXadrez)tabuleiro.peca(alvo);
 
+		//#specialmove promotion
+		promovida = null;
+		if(pecaMovimentada instanceof Peao) {
+			if((pecaMovimentada.getCor() == Cor.BRANCO && alvo.getLinha() == 0) || (pecaMovimentada.getCor() == Cor.PRETO && alvo.getLinha() == 7)){
+				promovida = (PecaDeXadrez) tabuleiro.peca(alvo);
+				promovida = substituirPecaPromovida("Q");
+			}
+		}
 		check = (testarCheck(oponente(jogadorAtual))) ? true : false;
 		
 		if(testarCheckMate(oponente(jogadorAtual))) {
@@ -169,6 +178,32 @@ public class PartidaDeXadrez {
 		}
 		return (PecaDeXadrez)pecaCapturada;
 	}
+
+	public PecaDeXadrez substituirPecaPromovida(String type){
+		if(promovida == null) {
+			throw new IllegalStateException("não há peça para ser promovida");
+		}
+		if(!type.equals("b") && !type.equals("c") && !type.equals("q") && !type.equals("r")){
+			throw new InvalidParameterException("tipo invalido para promoção");
+		}
+		Position pos = promovida.getXadrezPosition().ParaPosicao();
+		Peca p = tabuleiro.removerPeca(pos);
+		pecasNoTabuleiro.remove(p);
+
+		PecaDeXadrez novaPeca = novaPeca(type, promovida.getCor());
+		tabuleiro.posicionarPeca(novaPeca, pos);
+		pecasNoTabuleiro.add(novaPeca);
+
+		return novaPeca;
+
+	}
+
+	private PecaDeXadrez novaPeca(String type, Cor cor){
+		if(type.equals("b")) return new Bispo(tabuleiro, cor);
+		if(type.equals("c")) return new Cavalo(tabuleiro, cor);
+		if(type.equals("q")) return new Rainha(tabuleiro, cor);
+		return new Torre(tabuleiro, cor);
+	}
 	
 	public boolean getCheck() {
 		return check;
@@ -180,6 +215,10 @@ public class PartidaDeXadrez {
 
 	public PecaDeXadrez getVulneravelAEmpassant() {
 		return vulneravelAEmpassant;
+	}
+
+	public PecaDeXadrez getPromovida() {
+		return promovida;
 	}
 
 	private void validarPosicaoDeOrigem(Position position) {
