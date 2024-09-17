@@ -1,6 +1,5 @@
 package Xadrez;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -183,8 +182,8 @@ public class PartidaDeXadrez {
 		if(promovida == null) {
 			throw new IllegalStateException("não há peça para ser promovida");
 		}
-		if(!type.equals("b") && !type.equals("c") && !type.equals("q") && !type.equals("r")){
-			throw new InvalidParameterException("tipo invalido para promoção");
+		if(!type.equals("B") && !type.equals("C") && !type.equals("Q") && !type.equals("R")){
+			return promovida;
 		}
 		Position pos = promovida.getXadrezPosition().ParaPosicao();
 		Peca p = tabuleiro.removerPeca(pos);
@@ -199,9 +198,9 @@ public class PartidaDeXadrez {
 	}
 
 	private PecaDeXadrez novaPeca(String type, Cor cor){
-		if(type.equals("b")) return new Bispo(tabuleiro, cor);
-		if(type.equals("c")) return new Cavalo(tabuleiro, cor);
-		if(type.equals("q")) return new Rainha(tabuleiro, cor);
+		if(type.equals("B")) return new Bispo(tabuleiro, cor);
+		if(type.equals("C")) return new Cavalo(tabuleiro, cor);
+		if(type.equals("Q")) return new Rainha(tabuleiro, cor);
 		return new Torre(tabuleiro, cor);
 	}
 	
